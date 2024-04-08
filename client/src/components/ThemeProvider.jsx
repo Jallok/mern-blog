@@ -1,6 +1,10 @@
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
+ThemeProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
 export default function ThemeProvider({ children }) {
   const { theme } = useSelector((state) => state.theme);
   return (
@@ -11,8 +15,3 @@ export default function ThemeProvider({ children }) {
     </div>
   );
 }
-
-// Tambahkan validasi PropTypes untuk children
-ThemeProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
