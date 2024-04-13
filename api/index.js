@@ -1,5 +1,5 @@
 import express from "express";
-import { mongoose } from "mongoose";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 import userRoutes from "../api/routes/user.route.js";
@@ -7,31 +7,35 @@ import authRoutes from "../api/routes/auth.routh.js";
 
 dotenv.config();
 
-// koneksi ke monggose
+// Koneksi ke MongoDB
 mongoose
-  .connect(process.env.MONGO)
+  .connect(process.env.MONGO, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
-    console.log("Mongodb is connected");
+    console.log("MongoDB is connected");
   })
   .catch((err) => {
-    console.log(err);
+    console.error("MongoDB connection error:", err);
   });
 
 const app = express();
 
-// parsing json pada request body
+// Parsing JSON pada request body
 app.use(express.json());
 
-// menjalankan server di port 3000
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
+// Menjalankan server di port 3000
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
 
-// eksekusi request
+// Eksekusi request
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 
-// middleware handler error
+// Middleware untuk menangani error
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internal Server Error";
